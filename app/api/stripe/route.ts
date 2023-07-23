@@ -1,10 +1,11 @@
 import { auth, currentUser } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
-import primadb from "@/lib/prismadb";
+
+import prismadb from "@/lib/prismadb";
 import { stripe } from "@/lib/stripe";
 import { absoluteUrl } from "@/lib/utils";
 
-const settingUrl = absoluteUrl("/settings");
+const settingsUrl = absoluteUrl("/settings");
 
 export async function GET() {
   try {
@@ -15,51 +16,52 @@ export async function GET() {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    const userSubscription = await primadb.userSubscription.findUnique({
+    const userSubscription = await prismadb.userSubscription.findUnique({
       where: {
-        userId,
-      },
-    });
+        userId
+      }
+    })
 
     if (userSubscription && userSubscription.stripeCustomerId) {
       const stripeSession = await stripe.billingPortal.sessions.create({
         customer: userSubscription.stripeCustomerId,
-        return_url: settingUrl,
-      });
-      return new NextResponse(JSON.stringify({ url: stripeSession.url }));
+        return_url: settingsUrl,
+      })
+
+      return new NextResponse(JSON.stringify({ url: stripeSession.url }))
     }
 
     const stripeSession = await stripe.checkout.sessions.create({
-      success_url: settingUrl,
-      cancel_url: settingUrl,
+      success_url: settingsUrl,
+      cancel_url: settingsUrl,
       payment_method_types: ["card"],
       mode: "subscription",
       billing_address_collection: "auto",
       customer_email: user.emailAddresses[0].emailAddress,
       line_items: [
         {
-            price_data:{
-                currency:"USD",
-                product_data:{
-                    name:"Genius Pro",
-                    description:"Unlimited AI Generations"
-                },
-                unit_amount: 1,
-                recurring:{
-                    interval:"month",
-                }
+          price_data: {
+            currency: "USD",
+            product_data: {
+              name: "Genius Pro",
+              description: "Unlimited AI Generations"
             },
-            quantity:1,
-        }
+            unit_amount: 2000,
+            recurring: {
+              interval: "month"
+            }
+          },
+          quantity: 1,
+        },
       ],
-      metadata:{
+      metadata: {
         userId,
-      }
-      
-    });
-    return new NextResponse(JSON.stringify({ url: stripeSession.url }));
+      },
+    })
+
+    return new NextResponse(JSON.stringify({ url: stripeSession.url }))
   } catch (error) {
-    console.log("STRIPE_ERROR :", error);
+    console.log("[STRIPE_ERROR]", error);
     return new NextResponse("Internal Error", { status: 500 });
   }
-}
+};
