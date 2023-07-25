@@ -1,14 +1,15 @@
 import Stripe from "stripe";
-import { NextResponse } from "next/server";
 import { headers } from "next/headers";
-import primadb from "@/lib/prismadb";
+import { NextResponse } from "next/server";
+
+import prismadb from "@/lib/prismadb";
 import { stripe } from "@/lib/stripe";
 
 export async function POST(req: Request) {
   const body = await req.text();
   const signature = headers().get("Stripe-Signature") as string;
 
-  let event = Stripe.Event;
+  let event: Stripe.Event;
 
   try {
     event = stripe.webhooks.constructEvent(
@@ -16,9 +17,8 @@ export async function POST(req: Request) {
       signature,
       process.env.STRIPE_WEBHOOK_SECRET!
     );
-  } catch (error) {
-    console.log(error);
-    return new NextResponse(`WebHook_Error ${error.message}`, { status: 400 });
+  } catch (error: any) {
+    return new NextResponse(`Webhook Error: ${error.message}`, { status: 400 });
   }
 
   const session = event.data.object as Stripe.Checkout.Session;
@@ -29,10 +29,10 @@ export async function POST(req: Request) {
     );
 
     if (!session?.metadata?.userId) {
-      return new NextResponse("user Id is Required!", { status: 400 });
+      return new NextResponse("User id is required", { status: 400 });
     }
 
-    await primadb.userSubscription.create({
+    await prismadb.userSubscription.create({
       data: {
         userId: session?.metadata?.userId,
         stripeSubscriptionId: subscription.id,
@@ -50,7 +50,7 @@ export async function POST(req: Request) {
       session.subscription as string
     );
 
-    await primadb.userSubscription.update({
+    await prismadb.userSubscription.update({
       where: {
         stripeSubscriptionId: subscription.id,
       },
