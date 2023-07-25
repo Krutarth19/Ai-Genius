@@ -1,3 +1,18 @@
+## Project Deployment :
+https://ai-genius-iota.vercel.app/
+
+## Project Screenshots :
+![image](https://github.com/Krutarth19/Ai-Genius/assets/92313715/ff108d16-cfd8-4c2c-a58e-11e8aef0ffeb)
+![image](https://github.com/Krutarth19/Ai-Genius/assets/92313715/bad8f7ba-d0a0-493a-8954-3685143e3ed4)
+![image](https://github.com/Krutarth19/Ai-Genius/assets/92313715/37a59fb7-82b9-44e0-a191-0fb431f18e61)
+![image](https://github.com/Krutarth19/Ai-Genius/assets/92313715/cf1167b3-8ed8-4676-860d-c2c14cbbb6fa)
+![image](https://github.com/Krutarth19/Ai-Genius/assets/92313715/1d1ab925-aa5a-4afd-8173-ad0e69c05a7c)
+![image](https://github.com/Krutarth19/Ai-Genius/assets/92313715/76958593-a11c-4611-a1a1-96c0957c14a3)
+![image](https://github.com/Krutarth19/Ai-Genius/assets/92313715/8b073081-2742-4396-a18a-f3746152ede0)
+![image](https://github.com/Krutarth19/Ai-Genius/assets/92313715/ecb9091c-6b83-46d4-a512-44cf3d088622)
+![image](https://github.com/Krutarth19/Ai-Genius/assets/92313715/3c490017-5e4d-4a90-a814-72d6659b6dc6)
+![image](https://github.com/Krutarth19/Ai-Genius/assets/92313715/e9db639f-6060-4302-a0ca-28f8e6fa0ab4)
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
